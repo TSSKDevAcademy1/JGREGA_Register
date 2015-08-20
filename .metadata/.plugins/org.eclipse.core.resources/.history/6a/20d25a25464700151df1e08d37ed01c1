@@ -1,0 +1,64 @@
+package register;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+
+public class TextFileRegisterLoader implements RegisterLoader {
+	private static final String REGISTER_FILE = "file.txt";
+
+	@Override // Nacitanie udajov ulozenich v TextFile
+	public Register load() {
+		File file = new File(REGISTER_FILE);
+
+		if (!file.exists()) {
+			System.out.println("NEEXISTUJE FILE");
+			return null;
+		}
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+			Register register;
+			if (Main.choice == "1") {
+				register = new ArrayRegister(20);
+			} else {
+				register = new ListRegister();
+			}
+			String name;
+
+			while ((name = reader.readLine()) != null) {
+				String phoneNumber = reader.readLine();
+				if (phoneNumber == null) {
+					throw new IOException("Co si sprtal do registra??");
+				}
+				register.addPerson(new Person(name, phoneNumber));
+			}
+			return register;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override // Ulozenie udajov do TextFILE
+	public void save(Register register) {
+		// TODO Auto-generated method stub
+		try (PrintWriter pw = new PrintWriter(REGISTER_FILE)) {
+			for (int i = 0; i < register.getSize(); i++) {
+				Person p = register.getPerson(i);
+				pw.println(p.getName());
+				pw.println(p.getPhoneNumber());
+			}
+		} catch (Exception e) {
+
+		}
+	}
+
+}

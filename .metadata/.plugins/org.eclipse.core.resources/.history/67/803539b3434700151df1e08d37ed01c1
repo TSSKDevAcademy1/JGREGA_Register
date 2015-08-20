@@ -1,0 +1,106 @@
+package register;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * register.Person register.
+ */
+public class ArrayRegister implements Serializable, Register {
+	/** register.Person array. */
+	private Person[] persons;
+
+	/** Number of persons in this register. */
+	private int count;
+
+	/**
+	 * Constructor creates an empty register with maximum size specified.
+	 * 
+	 * @param size
+	 *            maximum size of the register
+	 */
+
+	public ArrayRegister(int size) {
+		persons = new Person[size];
+		count = 0;
+	}
+
+	@Override
+	public int getCount() {
+		return count;
+	}
+
+	@Override
+	public int getSize() {
+		return persons.length;
+	}
+
+	@Override
+	public Person getPerson(int index) {
+		return persons[index];
+	}
+
+	@Override
+	public void addPerson(Person person) {
+		persons[count] = person;
+		count++;
+	}
+
+	public void setPerson(Person person, int a) {
+		persons[a] = person;
+	}
+
+	@Override
+	public Person findPersonByName(String name) {
+		String findStr = "";		
+		for (int i = 0; i < persons.length; i++) {
+			if (persons[i] != null) {
+				findStr = persons[i].getName();
+				if (name.equals(findStr)) {
+					return persons[i];
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Person findPersonByPhoneNumber(String phoneNumber) {
+		String findStr = "";
+		for (int i = 0; i < persons.length; i++) {
+			if (persons[i] != null) {
+				findStr = persons[i].getPhoneNumber();
+				if (phoneNumber.equals(findStr)) {
+					return persons[i];
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void removePerson(Person person) {
+
+		for (int i = 0; i < persons.length; i++) {
+			if (persons[i] != null) {
+				if (persons[i].equals(person)) {
+					persons[i] = null;
+					count--;
+					for (int j = i; j < persons.length - 1; j++) {
+						if (persons[j + 1] != null) {
+							persons[j] = persons[j + 1];
+						} else {
+							persons[j] = null;
+						}
+					}
+
+				} else {
+
+				}
+			}
+		}
+	}
+}
